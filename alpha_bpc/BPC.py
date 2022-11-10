@@ -166,18 +166,51 @@ class BPC:
         )
         v_print("Filter extraction done")
 
-        self.x_convolved = convolve_filts(
+        v_print("Completed fitting")
+
+        return self
+
+    def transform(self, x_test):
+        """
+        Transform the test data
+        :param x_test: Test data
+        :return: Transformed test data
+        """
+
+        if self.filters is None:
+            raise ValueError("Model must be fitted before transforming")
+
+        x_test_convolved = convolve_filts(
+            x_test.reshape(x_test.shape[0], *self.orig_img_size),
+            None,
+            self.filters,
+            bsize=self.bsize,
+        )
+
+        x_test_convolved_extended = np.hstack((x_test, x_test_convolved))
+
+        return x_test_convolved_extended
+
+    def fit_transform(self, img_per_cluster):
+        """
+        Fit the model and transform the training data
+        :param img_per_cluster: Number of images to be selected per cluster, or number of images to be selected per group if using random sampling
+        """
+
+        self.fit(img_per_cluster)
+
+        x_convolved = convolve_filts(
             self.x_train.reshape(self.x_train.shape[0], *self.orig_img_size),
             None,
             self.filters,
             bsize=self.bsize,
         )
 
-        self.x_convolved_extended = np.hstack((self.x_train, self.x_convolved))
+        x_convolved_extended = np.hstack((self.x_train, x_convolved))
 
         v_print("Convolution done")
 
-        return self.x_convolved_extended
+        return x_convolved_extended
 
 
 if __name__ == "__main__":

@@ -27,9 +27,10 @@ def main():
         image_selection_method=1,
     )
 
-    x_train_convolved = BPC_extractor.fit(num_imgs)
+    x_train_convolved = BPC_extractor.fit_transform(num_imgs)
     print(x_train_convolved.shape)
 
 
 if __name__ == "__main__":
     main()
+    

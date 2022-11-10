@@ -25,10 +25,10 @@ def main():
         y_train,
         num_clusters=num_clusters,
         verbose=True,
-        image_selection_method=3,
+        image_selection_method=1,
     )
 
-    x_train_convolved = BPC_extractor.fit(num_imgs)
+    x_train_convolved = BPC_extractor.fit_transform(num_imgs)
     print(x_train_convolved.shape)
 
 
